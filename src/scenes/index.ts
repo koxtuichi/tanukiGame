@@ -1,13 +1,5 @@
 import Title from "./Title";
-import PartScenarioStart from "./PartScenarioStart";
-import PartSelective from "./PartSelective";
-import PartBattle from "./PartBattle";
 import PrologueScenario from "./1_prologue/PrologueScenario";
+import ScenarioStart from "./1_prologue/SecenarioStart";
 
-export const Scenes = [
-  Title,
-  PartScenarioStart,
-  PrologueScenario,
-  PartSelective,
-  PartBattle,
-];
+export const Scenes = [Title, ScenarioStart, PrologueScenario];

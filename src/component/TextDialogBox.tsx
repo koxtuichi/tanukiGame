@@ -23,17 +23,6 @@ const textStyle = (size: number) => ({
   borderRadius: "12px",
 });
 
-const imgStyle = {
-  width: 40,
-  height: 40,
-  position: "absolute",
-  right: 20,
-  bottom: 20,
-  "-webkit-animation": "blink 0.4s ease-in-out infinite alternate",
-  "-moz-animation": "blink 0.4s ease-in-out infinite alternate",
-  animation: "blink 0.4s ease-in-out infinite alternate",
-} as const;
-
 type TextDialogBoxProps = {
   text?: string;
   name?: string;
@@ -45,10 +34,6 @@ const TextDialogBox = ({ text, name, size = 30 }: TextDialogBoxProps) => {
     <div>
       <div style={nameStyle}>{name}</div>
       <div style={textStyle(size)}>{text}</div>
-      <img
-        src="src/assets/img/partScenario/scenario_next_icon.png"
-        style={imgStyle}
-      />
     </div>
   );
 };

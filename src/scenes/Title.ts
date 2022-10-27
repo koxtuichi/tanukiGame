@@ -23,7 +23,7 @@ export default class Title extends Phaser.Scene {
       .setHTML(Button({ name: "スタート", width: 160, height: 80 }).outerHTML)
       .addListener("click")
       .on("click", () => {
-        this.scene.start("PartScenarioStart");
+        this.scene.start("ScenarioStart");
       });
     this.add
       .dom(width / 2 + 160 + 24, height - 80, "div")

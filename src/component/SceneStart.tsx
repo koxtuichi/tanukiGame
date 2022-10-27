@@ -1,14 +1,14 @@
 import React from "../jsx-dom-shim";
 
-const paperStyle = {
-  width: "1280px",
-  height: "720px",
+const paperStyle = (width: number | string, height: number | string) => ({
+  width: width,
+  height: height,
   background: "#FFF",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   cursor: "pointer",
-};
+});
 
 const scenarioTitleStyle = {
   animationName: "fadeInAnime",
@@ -27,11 +27,13 @@ const scenarioTitleStyle = {
 
 type SceneStart = {
   titleText: string;
+  width: number | string;
+  height: number | string;
 };
 
-const SceneStart = ({ titleText }: SceneStart) => {
+const SceneStart = ({ titleText, width, height }: SceneStart) => {
   return (
-    <div style={paperStyle}>
+    <div style={paperStyle(width, height)}>
       <div style={scenarioTitleStyle}>{titleText}</div>
     </div>
   );
