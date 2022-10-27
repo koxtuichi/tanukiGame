@@ -6,6 +6,7 @@ type openingType = {
     bgImgId: string;
     size?: number;
     comments?: string[];
+    selects?: string[];
   }[];
 };
 
@@ -25,7 +26,7 @@ export const opening: openingType = {
         "よ。",
         "うぽつ",
         "うぽつ",
-        "きたああああああああ",
+        "きたああ",
         "カエル？",
         "食え",
         "とうとう動物まで殺めたのか",
@@ -100,11 +101,12 @@ export const opening: openingType = {
         "dmみろ",
         "カメラつけろ",
       ],
+      selects: ["争奪戦だ！はやくしろ", "不謹慎だからやめろ"],
     },
     {
       next: "text",
       name: "とある配信者",
-      text: "いや、絶対呪われるよな・・・。",
+      text: "やっぱ争奪戦だよな！はやいものがちだよな",
       bgImgId: "",
       size: 30,
     },

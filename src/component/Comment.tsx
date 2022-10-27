@@ -12,26 +12,35 @@ const commentBox: CSSProperties = {
 const commentStyle: CSSProperties = {
   fontSize: "40px",
   fontWeight: 700,
-  WebkitTextStrokeWidth: "1px",
-  WebkitTextStrokeColor: "#FFF",
+  color: "#FFF",
+  WebkitTextStrokeWidth: "2px",
+  WebkitTextStrokeColor: "#a9a9a9",
 };
 
-const commentPositionStyle = (x: number) => ({
-  transform: `translateY(-100px) translateX(${x}px)`,
-});
+const commentPositionStyle = (x: number, isPostComment: boolean) =>
+  ({
+    transform: `translateY(-100px) translateX(${x}px)`,
+    border: isPostComment ? "1px solid yellow" : "",
+  } as const);
 
 type CommentProps = {
   comments?: string[];
+  isPostComment?: boolean;
 };
 
-const Comment = ({ comments }: CommentProps) => {
+const Comment = ({ comments, isPostComment = false }: CommentProps) => {
   return (
     <div>
       <div style={commentBox}>
         {comments &&
           comments.map((c, i) => {
             return (
-              <div style={commentPositionStyle(Math.random() * 10 * 10)}>
+              <div
+                style={commentPositionStyle(
+                  Math.random() * 10 * 10,
+                  isPostComment
+                )}
+              >
                 <div style={commentStyle}>{c}</div>
               </div>
             );

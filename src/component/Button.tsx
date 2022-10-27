@@ -2,22 +2,45 @@ import React from "../jsx-dom-shim";
 
 type ButtonProps = {
   name: string;
-  width: number;
-  height: number;
+  width: number | string;
+  height: number | string;
+  color?: string;
+  background?: string;
+  border?: string;
+  padding?: string;
 };
 
-const Button = ({ name, width, height }: ButtonProps) => (
+const buttonStyle = (
+  width: number | string,
+  height: number | string,
+  color: string = "#fff",
+  background: string = "#3cb371",
+  border: string = "4px solid white",
+  padding: string = ""
+) =>
+  ({
+    width: width,
+    height: height,
+    background: background,
+    color: color,
+    border: border,
+    cursor: "pointer",
+    borderRadius: "12px",
+    fontSize: "20px",
+    padding: padding,
+  } as const);
+
+const Button = ({
+  name,
+  width,
+  height,
+  color,
+  background,
+  border,
+  padding,
+}: ButtonProps) => (
   <button
-    style={{
-      width: width,
-      height: height,
-      backgroundColor: "#3cb371",
-      color: "#fff",
-      border: "4px solid #FFF",
-      cursor: "pointer",
-      borderRadius: "12px",
-      fontSize: "20px",
-    }}
+    style={buttonStyle(width, height, color, background, border, padding)}
   >
     {name}
   </button>

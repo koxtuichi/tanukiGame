@@ -16,7 +16,7 @@ export default class PartScenarioStart extends Phaser.Scene {
       .setHTML(SceneStart({ titleText: "20XX年3月13日 深夜" }).outerHTML)
       .addListener("click")
       .on("click", () => {
-        this.scene.start("PartScenario");
+        this.scene.start("PrologueScenario");
       });
   }
 }

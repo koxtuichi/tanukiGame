@@ -1,9 +1,16 @@
 import React from "../jsx-dom-shim";
+import { CSSProperties } from "jsx-dom";
 
-const nameStyle = {
+const nameStyle: CSSProperties = {
+  width: "fit-content",
   height: "20px",
+  margin: "0 0 10px 0",
+  display: "flex",
+  alignItems: "center",
   padding: "16px",
   fontSize: "20px",
+  background: "black",
+  color: "white",
 };
 
 const textStyle = (size: number) => ({

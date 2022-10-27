@@ -14,6 +14,10 @@ const config: Phaser.Types.Core.GameConfig = {
   audio: {
     disableWebAudio: true,
   },
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
+  },
 };
 
 new Phaser.Game(config);

@@ -30,5 +30,9 @@ export default class Title extends Phaser.Scene {
       .setHTML(
         Button({ name: "オプション", width: 160, height: 80 }).outerHTML
       );
+
+    //レスポンシブ
+    this.scale.displaySize.setAspectRatio(width / height);
+    this.scale.refresh();
   }
 }
