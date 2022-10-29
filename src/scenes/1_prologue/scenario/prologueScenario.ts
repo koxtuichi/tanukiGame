@@ -1,22 +1,22 @@
-type openingType = {
-  [timelineId: string]: {
-    next: "text" | "scene";
-    name: string;
-    text: string;
-    bgImgId: string;
-    size?: number;
-    comments?: string[];
-    selects?: string[];
-  }[];
+export type timeLineType = {
+  name: string;
+  text: string;
+  bgImgId: string;
+  size?: number;
+  comments?: string[];
+  selects?: string[];
 };
 
-export const opening: openingType = {
+export type timeLinesType = {
+  [timelineId: string]: timeLineType[];
+};
+
+export const prologueScenario: timeLinesType = {
   start: [
     {
-      next: "text",
       name: "とある配信者",
       text: "えええぇぇぇっ！？",
-      bgImgId: "",
+      bgImgId: "tanuki",
       size: 50,
       comments: [
         "突発かよ",
@@ -31,17 +31,15 @@ export const opening: openingType = {
       ],
     },
     {
-      next: "text",
       name: "とある配信者",
       text: "あのさぁ、コンビニに来たら動物死んでんだけど・・・。",
-      bgImgId: "",
+      bgImgId: "tanuki",
       size: 30,
     },
     {
-      next: "text",
       name: "とある配信者",
       text: "これ食えるか？",
-      bgImgId: "",
+      bgImgId: "tanuki",
       size: 30,
       comments: [
         "くえないだろ",
@@ -67,17 +65,21 @@ export const opening: openingType = {
       ],
     },
     {
-      next: "text",
       name: "とある配信者",
       text: "きみたち教えてくれよぉ",
-      bgImgId: "",
+      bgImgId: "tanuki",
       size: 30,
     },
     {
-      next: "text",
+      name: "とある配信者",
+      text: "だれにもとられたくないんだよ",
+      bgImgId: "tanuki",
+      size: 30,
+    },
+    {
       name: "とある配信者",
       text: "サッカーボールキックで運んでいいかな？",
-      bgImgId: "",
+      bgImgId: "tanuki",
       size: 30,
       comments: [
         "草",
@@ -100,11 +102,28 @@ export const opening: openingType = {
       selects: ["争奪戦だ！はやくしろ", "不謹慎だからやめろ"],
     },
     {
-      next: "text",
       name: "とある配信者",
       text: "やっぱ争奪戦だよな！はやいものがちだよな",
-      bgImgId: "",
+      bgImgId: "tanuki",
       size: 30,
+      comments: [
+        "草",
+        "サッカーボールキック？？",
+        "けるなｗｗ",
+        "おい、母さんなくぞ",
+        "食べ物を粗末にするな",
+        "こいつまじかｗ",
+        "いいよ",
+        "ぶっさ",
+        "食材ゲット",
+        "狂ってやがる",
+        "ቻﾝቻﾝがቺቻቺቻ",
+        "お薬飲んで！",
+        "狂犬病",
+        "💊",
+        "dmみろ",
+        "カメラつけろ",
+      ],
     },
   ],
 };

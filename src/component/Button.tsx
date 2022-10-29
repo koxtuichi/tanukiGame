@@ -8,6 +8,7 @@ type ButtonProps = {
   background?: string;
   border?: string;
   padding?: string;
+  fontSize?: string;
 };
 
 const buttonStyle = (
@@ -16,7 +17,8 @@ const buttonStyle = (
   color: string = "#fff",
   background: string = "#3cb371",
   border: string = "4px solid white",
-  padding: string = ""
+  padding: string = "",
+  fontSize: string = "20px"
 ) =>
   ({
     width: width,
@@ -26,7 +28,7 @@ const buttonStyle = (
     border: border,
     cursor: "pointer",
     borderRadius: "12px",
-    fontSize: "20px",
+    fontSize: fontSize,
     padding: padding,
   } as const);
 
@@ -38,9 +40,18 @@ const Button = ({
   background,
   border,
   padding,
+  fontSize,
 }: ButtonProps) => (
   <button
-    style={buttonStyle(width, height, color, background, border, padding)}
+    style={buttonStyle(
+      width,
+      height,
+      color,
+      background,
+      border,
+      padding,
+      fontSize
+    )}
   >
     {name}
   </button>

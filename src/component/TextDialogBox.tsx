@@ -21,6 +21,8 @@ const textStyle = (size: number) => ({
   color: "#FFF",
   fontSize: size + "px",
   borderRadius: "12px",
+  border: "3px solid rgb(255,0,255, 0.3)",
+  cursor: "pointer",
 });
 
 type TextDialogBoxProps = {
