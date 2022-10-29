@@ -40,7 +40,7 @@ export default class PrologueScenario extends Scenario {
   update(time: number, delta: number) {
     if (
       //選択肢ある
-      this.timeLine[this.timeLineIndex]?.selects &&
+      this.timeLine[this.timeLineIndex]?.choices &&
       //投稿コメントが画面にない
       !this.postComment &&
       //ダイアログのテキストが最後の文字まで表示されている
@@ -48,7 +48,7 @@ export default class PrologueScenario extends Scenario {
     ) {
       //選択肢を表示する
       this.choicesDisp({
-        choices: this.timeLine[this.timeLineIndex].selects,
+        choices: this.timeLine[this.timeLineIndex].choices,
         timeLineKey: "start",
       });
     } else {

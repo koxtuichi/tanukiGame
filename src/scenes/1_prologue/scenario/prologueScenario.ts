@@ -4,7 +4,7 @@ export type timeLineType = {
   bgImgId: string;
   size?: number;
   comments?: string[];
-  selects?: string[];
+  choices?: string[];
 };
 
 export type timeLinesType = {
@@ -29,6 +29,7 @@ export const prologueScenario: timeLinesType = {
         "食え",
         "ぶっさ",
       ],
+      choices: ["どうした", "ぶっさ"],
     },
     {
       name: "とある配信者",
@@ -99,7 +100,7 @@ export const prologueScenario: timeLinesType = {
         "dmみろ",
         "カメラつけろ",
       ],
-      selects: ["争奪戦だ！はやくしろ", "不謹慎だからやめろ"],
+      choices: ["争奪戦だ！はやくしろ", "不謹慎だからやめろ"],
     },
     {
       name: "とある配信者",
