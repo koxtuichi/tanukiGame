@@ -250,7 +250,9 @@ export default class Scenario extends Phaser.Scene {
       !(this.charIndex + 1 <= this.chars[timeLineKey].length)
     ) {
       //上の選択肢
-      this.topChoices
+      this.topChoices = this.add
+        .dom(this.width / 2, this.height / 2 + 60, "div")
+        .setDepth(200)
         .setHTML(
           Button({
             name: choices[0],
@@ -268,8 +270,8 @@ export default class Scenario extends Phaser.Scene {
           this.postCommentWidth = this.width;
           this.postComment = e.target.outerText;
           this.postCommentFilter.setVisible(false);
-          this.topChoices.setVisible(false);
-          this.bottomChoices.setVisible(false);
+          this.topChoices.destroy(true);
+          this.bottomChoices.destroy(true);
           this.postCommentDOM.setHTML(
             Comments({
               comments: [this.postComment],
@@ -279,7 +281,9 @@ export default class Scenario extends Phaser.Scene {
         });
 
       //下の選択肢
-      this.bottomChoices
+      this.bottomChoices = this.add
+        .dom(this.width / 2, this.height / 2 - 60, "div")
+        .setDepth(200)
         .setHTML(
           Button({
             name: choices[1],
@@ -297,8 +301,8 @@ export default class Scenario extends Phaser.Scene {
           this.postCommentWidth = this.width;
           this.postComment = e.target.outerText;
           this.postCommentFilter.setVisible(false);
-          this.topChoices.setVisible(false);
-          this.bottomChoices.setVisible(false);
+          this.topChoices.destroy(true);
+          this.bottomChoices.destroy(true);
           this.postCommentDOM = this.add
             .dom(this.width, this.height / 2 + 100, "div")
             .setHTML(
