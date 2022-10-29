@@ -8,6 +8,8 @@ import Comments from "../../component/Comments";
 import PostComment from "../../component/PostCommentFilter";
 import Button from "../../component/Button";
 import TextDialogBox from "../../component/TextDialogBox";
+import StressPoint from "../1_prologue/point/StressPoint";
+import { Point } from "../../component/Point";
 
 type initProps = {
   bgImages: string[];
@@ -26,6 +28,14 @@ type setCharProps = {
 };
 
 type setComments = {
+  timeLineKey: string;
+};
+
+type nextCharProps = {
+  timeLineKey: string;
+};
+
+type nextAnswerCharProps = {
   timeLineKey: string;
 };
 
@@ -49,11 +59,13 @@ export default class Scenario extends Phaser.Scene {
   nextSceneName: string;
   bgImages: {} = {};
   nanaharaImages: {} = {};
+  charIndex: number = 0;
   chars: {} = {};
+  answerCharsIndex: number = 0;
+  answerChars: {} = {};
   timeLineIndex: number = 0;
   timeLine: timeLineType[];
   elapsedTime: number = 0;
-  charIndex: number = 0;
   txtDisp: string = "";
   dialogBox: Phaser.GameObjects.DOMElement;
   nextIcon: Phaser.GameObjects.DOMElement;
@@ -62,9 +74,12 @@ export default class Scenario extends Phaser.Scene {
   topChoices: Phaser.GameObjects.DOMElement;
   bottomChoices: Phaser.GameObjects.DOMElement;
   postCommentFilter: Phaser.GameObjects.DOMElement;
-  postComment: string;
+  postCommentIndex: number;
   postCommentWidth: number;
   postCommentDOM: Phaser.GameObjects.DOMElement;
+  isPostedComment: boolean = false;
+  stressPoint: StressPoint;
+  pointDOM: Phaser.GameObjects.DOMElement;
 
   preload() {}
 
@@ -73,6 +88,10 @@ export default class Scenario extends Phaser.Scene {
   update(time: number, delta: number) {}
 
   init({ bgImages, nanaharaImages, timeLineKey, timeLines }: initProps) {
+    //ストレスポイント
+    this.stressPoint = new StressPoint();
+    this.pointDOM = this.add.dom(100, 100, "div");
+
     this.width = this.game.canvas.width;
     this.height = this.game.canvas.height;
 
@@ -153,8 +172,8 @@ export default class Scenario extends Phaser.Scene {
   }
 
   // 文字をひとつずつ順番に表示
-  nextChar = () => {
-    this.txtDisp += this.chars["start"][this.charIndex];
+  nextChar = ({ timeLineKey }: nextCharProps) => {
+    this.txtDisp += this.chars[timeLineKey][this.charIndex];
     this.elapsedTime = 0;
     this.charIndex += 1;
     this.dialogBox.setHTML(
@@ -166,8 +185,29 @@ export default class Scenario extends Phaser.Scene {
     );
   };
 
-  // 次のテキストに移る（同じタイミングでコメント表示）
+  nextAnswerChar = ({ timeLineKey }: nextAnswerCharProps) => {
+    if (this.answerCharsIndex === 0) {
+      //回答前のテキストは削除
+      this.txtDisp = "";
+    }
+    this.txtDisp += this.answerChars[timeLineKey][this.answerCharsIndex];
+    this.elapsedTime = 0;
+    this.answerCharsIndex += 1;
+    this.dialogBox.setHTML(
+      TextDialogBox({
+        text: this.txtDisp,
+        name: this.timeLine[this.timeLineIndex].name,
+        size: this.timeLine[this.timeLineIndex].answerSize || 30,
+      }).outerHTML
+    );
+  };
+
+  //次のテキストに移る（同じタイミングでコメント表示）
   nextTimeLine = ({ timeLineKey }: nextTimeLineProps) => {
+    //回答をリセット
+    this.answerChars = {};
+    this.answerCharsIndex = 0;
+
     this.txtDisp = "";
     this.elapsedTime = 0;
     this.timeLineIndex += 1;
@@ -186,28 +226,64 @@ export default class Scenario extends Phaser.Scene {
   dialogTextDisp = ({ delta, timeLineKey }: timeLineDisp) => {
     this.elapsedTime += delta;
     if (80 < this.elapsedTime) {
-      if (this.charIndex + 1 <= this.chars["start"].length) {
-        //一文字ずつ順番にテキストを表示
-        this.nextChar();
-        this.nextIcon.setVisible(false);
-      } else {
-        if (
-          this.dialogBox.listenerCount("click") === 0 &&
-          this.commentsPosition[this.timeLineIndex] < (this.width / 5) * 4
-        ) {
-          //テキストを最後の文字まで表示したらクリックイベントを追加する
-          this.nextIcon.setVisible(true);
-          this.dialogBox.addListener("click").on("click", () => {
-            if (this.timeLineIndex < this.timeLine.length) {
-              this.nextTimeLine({ timeLineKey: timeLineKey });
-            }
-            this.dialogBox.removeAllListeners();
-          });
+      if (
+        this.answerChars &&
+        this.answerChars[timeLineKey] &&
+        0 < this.answerChars[timeLineKey].length
+      ) {
+        //回答がある場合は優先
+        if (this.answerCharsIndex + 1 <= this.answerChars["start"].length) {
+          //一文字ずつ順番にテキストを表示
+          this.nextAnswerChar({ timeLineKey: timeLineKey });
+          this.nextIcon.setVisible(false);
+        } else {
+          if (
+            this.dialogBox.listenerCount("click") === 0 &&
+            this.commentsPosition[this.timeLineIndex] < (this.width / 5) * 4
+          ) {
+            //テキストを最後の文字まで表示したらクリックイベントを追加する
+            this.nextIcon.setVisible(true);
+            this.dialogBox.addListener("click").on("click", () => {
+              if (this.timeLineIndex < this.timeLine.length) {
+                this.nextTimeLine({ timeLineKey: timeLineKey });
+              }
+              this.dialogBox.removeAllListeners();
+            });
+          }
+          // if (this.timeLine.length === this.timeLineIndex) {
+          //   //シーンのテキストが最後まで表示したら次のシーンへ遷移する
+          //   if (this.nextSceneName) {
+          //     this.scene.start(this.nextSceneName);
+          //   }
+          // }
         }
-        if (this.timeLine.length === this.timeLineIndex) {
-          //シーンのテキストが最後まで表示したら次のシーンへ遷移する
-          if (this.nextSceneName) {
-            this.scene.start(this.nextSceneName);
+      } else {
+        if (this.charIndex + 1 <= this.chars["start"].length) {
+          //一文字ずつ順番にテキストを表示
+          this.nextChar({ timeLineKey: timeLineKey });
+          this.nextIcon.setVisible(false);
+        } else {
+          //テキストがすべて表示されていれば、投稿コメントフラグ解除
+          this.isPostedComment = false;
+
+          if (
+            this.dialogBox.listenerCount("click") === 0 &&
+            this.commentsPosition[this.timeLineIndex] < (this.width / 5) * 4
+          ) {
+            //テキストを最後の文字まで表示したらクリックイベントを追加する
+            this.nextIcon.setVisible(true);
+            this.dialogBox.addListener("click").on("click", () => {
+              if (this.timeLineIndex < this.timeLine.length) {
+                this.nextTimeLine({ timeLineKey: timeLineKey });
+              }
+              this.dialogBox.removeAllListeners();
+            });
+          }
+          if (this.timeLine.length === this.timeLineIndex) {
+            //シーンのテキストが最後まで表示したら次のシーンへ遷移する
+            if (this.nextSceneName) {
+              this.scene.start(this.nextSceneName);
+            }
           }
         }
       }
@@ -226,12 +302,12 @@ export default class Scenario extends Phaser.Scene {
       c.setPosition(this.commentsPosition[i], this.height / 2);
     });
 
-    if (this.postComment) {
+    if (this.isPostedComment) {
       if (this.postCommentWidth < -1000) {
         //画面外に出たコメントはなくす
-        this.postComment = "";
         this.postCommentWidth = 0;
         this.postCommentDOM.destroy(true);
+        return;
       }
       this.postCommentWidth -= 7;
       this.postCommentDOM.setPosition(
@@ -267,17 +343,38 @@ export default class Scenario extends Phaser.Scene {
         )
         .addListener("click")
         .on("click", (e) => {
+          this.isPostedComment = true;
           this.postCommentWidth = this.width;
-          this.postComment = e.target.outerText;
+          this.postCommentIndex = 0;
           this.postCommentFilter.setVisible(false);
           this.topChoices.destroy(true);
           this.bottomChoices.destroy(true);
           this.postCommentDOM.setHTML(
             Comments({
-              comments: [this.postComment],
+              comments: [e.target.outerText],
               isPostComment: true,
             }).outerHTML
           );
+          if (this.timeLine[this.timeLineIndex]?.answer) {
+            //回答があれば表示
+            this.answerChars[timeLineKey] = [
+              ...(this.timeLine[this.timeLineIndex]?.answer[
+                this.postCommentIndex
+              ] || ""),
+            ];
+            //ストレスポイントをセット
+            this.stressPoint.setPoint({
+              point:
+                this.timeLine[this.timeLineIndex].stressPoint[
+                  this.postCommentIndex
+                ],
+            });
+            this.pointDOM.destroy(true);
+            this.pointDOM.setVisible(false);
+            this.pointDOM = this.add
+              .dom(100, 100, "div")
+              .setHTML(Point(this.stressPoint.stressPoint).outerHTML);
+          }
         });
 
       //下の選択肢
@@ -298,8 +395,9 @@ export default class Scenario extends Phaser.Scene {
         )
         .addListener("click")
         .on("click", (e) => {
+          this.isPostedComment = true;
           this.postCommentWidth = this.width;
-          this.postComment = e.target.outerText;
+          this.postCommentIndex = 1;
           this.postCommentFilter.setVisible(false);
           this.topChoices.destroy(true);
           this.bottomChoices.destroy(true);
@@ -307,10 +405,30 @@ export default class Scenario extends Phaser.Scene {
             .dom(this.width, this.height / 2 + 100, "div")
             .setHTML(
               Comments({
-                comments: [this.postComment],
+                comments: [e.target.outerText],
                 isPostComment: true,
               }).outerHTML
             );
+          if (this.timeLine[this.timeLineIndex]?.answer) {
+            //回答があれば表示
+            this.answerChars[timeLineKey] = [
+              ...(this.timeLine[this.timeLineIndex].answer[
+                this.postCommentIndex
+              ] || ""),
+            ];
+            //ストレスポイントをセット
+            this.stressPoint.setPoint({
+              point:
+                this.timeLine[this.timeLineIndex].stressPoint[
+                  this.postCommentIndex
+                ],
+            });
+            this.pointDOM.setVisible(false);
+            this.pointDOM.destroy(true);
+            this.pointDOM = this.add
+              .dom(100, 100, "div")
+              .setHTML(Point(this.stressPoint.stressPoint).outerHTML);
+          }
         });
 
       this.postCommentFilter.setVisible(true);

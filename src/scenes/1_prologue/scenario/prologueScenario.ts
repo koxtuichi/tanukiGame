@@ -5,6 +5,9 @@ export type timeLineType = {
   size?: number;
   comments?: string[];
   choices?: string[];
+  answer?: string[];
+  answerSize?: number;
+  stressPoint?: number[];
 };
 
 export type timeLinesType = {
@@ -30,6 +33,9 @@ export const prologueScenario: timeLinesType = {
         "ぶっさ",
       ],
       choices: ["どうした", "ぶっさ"],
+      answer: ["はぁ・・・", "ぶっさってもう見慣れてるでしょ"],
+      answerSize: 30,
+      stressPoint: [0, 1],
     },
     {
       name: "とある配信者",
@@ -64,22 +70,25 @@ export const prologueScenario: timeLinesType = {
         "ロードキルか？",
         "逆に食べない理由って何なの？",
       ],
+      choices: ["だから暗くてみえないって", "まずは生態調査だ"],
+      answer: ["ああ、ご、ごめん。。", "だよな！"],
+      stressPoint: [5, 1],
     },
     {
       name: "とある配信者",
-      text: "きみたち教えてくれよぉ",
+      text: "でも食う前にまず確保しなきゃ",
       bgImgId: "tanuki",
       size: 30,
     },
     {
       name: "とある配信者",
-      text: "だれにもとられたくないんだよ",
+      text: "だれにも取られたくない！これは争奪戦だ",
       bgImgId: "tanuki",
       size: 30,
     },
     {
       name: "とある配信者",
-      text: "サッカーボールキックで運んでいいかな？",
+      text: "ところでサッカーボールキックで運んでいいかな？",
       bgImgId: "tanuki",
       size: 30,
       comments: [
@@ -100,17 +109,22 @@ export const prologueScenario: timeLinesType = {
         "dmみろ",
         "カメラつけろ",
       ],
-      choices: ["争奪戦だ！はやくしろ", "不謹慎だからやめろ"],
+      choices: ["リフティングでいけ", "不謹慎だからやめろ"],
+      answer: [
+        "リフティングなんてむりだよぉ",
+        "やめろってなんだよぉ・・・まだ配信はじめたばかりでしょぉ！？もう少し我慢してよー",
+      ],
+      stressPoint: [5, 10],
     },
     {
       name: "とある配信者",
-      text: "やっぱ争奪戦だよな！はやいものがちだよな",
+      text: "まぁでも今いかなきゃいけないからいくか・・・！",
       bgImgId: "tanuki",
       size: 30,
       comments: [
         "草",
-        "サッカーボールキック？？",
-        "けるなｗｗ",
+        "いいからはよいけ",
+        "なに迷ってるんだよ",
         "おい、母さんなくぞ",
         "食べ物を粗末にするな",
         "こいつまじかｗ",

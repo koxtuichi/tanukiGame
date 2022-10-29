@@ -42,7 +42,7 @@ export default class PrologueScenario extends Scenario {
       //選択肢ある
       this.timeLine[this.timeLineIndex]?.choices &&
       //投稿コメントが画面にない
-      !this.postComment &&
+      !this.isPostedComment &&
       //ダイアログのテキストが最後の文字まで表示されている
       !(this.charIndex + 1 <= this.chars["start"].length)
     ) {
