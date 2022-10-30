@@ -27,10 +27,6 @@ type setCharProps = {
   timeLineKey: string;
 };
 
-type setComments = {
-  timeLineKey: string;
-};
-
 type nextCharProps = {
   timeLineKey: string;
 };
@@ -158,7 +154,7 @@ export default class Scenario extends Phaser.Scene {
     }
   }
 
-  setComments({ timeLineKey }: setComments) {
+  setComments() {
     const commentStartPosition = this.width + 200;
 
     //流れるコメントの開始位置
@@ -260,7 +256,7 @@ export default class Scenario extends Phaser.Scene {
           this.dialogBox.addListener("click").on("click", () => {
             if (this.timeLineIndex < this.timeLine.length) {
               this.nextTimeLine({ timeLineKey: timeLineKey });
-              this.setComments({ timeLineKey: timeLineKey });
+              this.setComments();
             }
             this.dialogBox.removeAllListeners();
           });
@@ -389,7 +385,7 @@ export default class Scenario extends Phaser.Scene {
             .dom(100, 100, "div")
             .setHTML(Point(this.stressPoint.stressPoint).outerHTML);
         }
-        this.setComments({ timeLineKey: timeLineKey });
+        this.setComments();
       });
 
     //下の選択肢
@@ -444,7 +440,7 @@ export default class Scenario extends Phaser.Scene {
             .dom(100, 100, "div")
             .setHTML(Point(this.stressPoint.stressPoint).outerHTML);
         }
-        this.setComments({ timeLineKey: timeLineKey });
+        this.setComments();
       });
 
     this.choicesFilter.setVisible(true);
