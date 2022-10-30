@@ -28,8 +28,6 @@ export default class PrologueScenario extends Scenario {
     this.setTimeLines({ timeLineKey: "start", timeLines: prologueScenario });
     //タイムラインテキストをセット
     this.setChar({ timeLineKey: "start" });
-    //コメントセット
-    this.setComments({ timeLineKey: "start" });
 
     //背景画像
     this.bgImages["tanuki"].setVisible(true);
@@ -39,12 +37,17 @@ export default class PrologueScenario extends Scenario {
 
   update(time: number, delta: number) {
     if (
+      //表示フラグたっている
+      this.isChoiceDisp &&
       //選択肢ある
       this.timeLine[this.timeLineIndex]?.choices &&
       //投稿コメントが画面にない
       !this.isPostedComment &&
       //ダイアログのテキストが最後の文字まで表示されている
-      !(this.charIndex + 1 <= this.chars["start"].length)
+      !(this.charIndex + 1 <= this.chars["start"].length) &&
+      //選択肢が表示されていない
+      !this.topChoices.visible &&
+      !this.bottomChoices.visible
     ) {
       //選択肢を表示する
       this.choicesDisp({
