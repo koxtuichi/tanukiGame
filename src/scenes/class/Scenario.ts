@@ -10,6 +10,7 @@ import Button from "../../component/Button";
 import TextDialogBox from "../../component/TextDialogBox";
 import StressPoint from "../1_prologue/point/StressPoint";
 import { Point } from "../../component/Point";
+import Image from "../../component/Image";
 
 type initProps = {
   bgImages: string[];
@@ -53,8 +54,8 @@ export default class Scenario extends Phaser.Scene {
   width: number;
   height: number;
   nextSceneName: string;
-  bgImages: {} = {};
-  nanaharaImages: {} = {};
+  bgImagesDOM: { [key: string]: Phaser.GameObjects.DOMElement } = {};
+  nanaharaImagesDOM: { [key: string]: Phaser.GameObjects.DOMElement } = {};
   charIndex: number = 0;
   chars: {} = {};
   answerCharsIndex: number = 0;
@@ -92,6 +93,36 @@ export default class Scenario extends Phaser.Scene {
     this.width = this.game.canvas.width;
     this.height = this.game.canvas.height;
 
+    //背景画像
+    if (bgImages && 0 < bgImages.length) {
+      bgImages.map((b) => {
+        this.bgImagesDOM[b] = this.add
+          .dom(this.width / 2, this.height / 2, "div")
+          .setHTML(
+            Image({
+              width: this.width,
+              height: this.height,
+              src: `src/assets/img/prologue/${b}.png`,
+            }).outerHTML
+          )
+          .setVisible(false);
+      });
+    }
+    //七原くん画像
+    if (nanaharaImages && 0 < nanaharaImages.length) {
+      nanaharaImages.map((n) => {
+        this.nanaharaImagesDOM[n] = this.add
+          .dom(1000, this.height / 2 - 40, "div")
+          .setHTML(
+            Image({
+              width: 500,
+              height: 500,
+              src: `src/assets/img/nanahara/${n}.png`,
+            }).outerHTML
+          )
+          .setVisible(false);
+      });
+    }
     //会話ボックス
     this.dialogBox = this.add.dom(this.width / 2, this.height - 155, "div");
     //次へアイコン
@@ -123,23 +154,6 @@ export default class Scenario extends Phaser.Scene {
 
     //流れる投稿コメント
     this.postCommentDOM = this.add.dom(this.width, this.height, "div");
-
-    if (bgImages && 0 < bgImages.length) {
-      bgImages.map((b) => {
-        this.bgImages[b] = this.add
-          .image(this.width / 2, this.height / 2, b)
-          .setVisible(false);
-      });
-    }
-
-    if (nanaharaImages && 0 < nanaharaImages.length) {
-      nanaharaImages.map((n) => {
-        this.nanaharaImages[n] = this.add
-          .image(1000, this.height / 2 - 40, n)
-          .setDisplaySize(500, 500)
-          .setVisible(false);
-      });
-    }
   }
 
   setTimeLines({ timeLineKey, timeLines }: setTimeLinesProps) {

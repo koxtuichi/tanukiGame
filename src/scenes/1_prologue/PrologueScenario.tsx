@@ -30,9 +30,15 @@ export default class PrologueScenario extends Scenario {
     this.setChar({ timeLineKey: "start" });
 
     //背景画像
-    this.bgImages["tanuki"].setVisible(true);
+    this.bgImagesDOM["tanuki"].setVisible(true);
     //七原くん画像
-    this.nanaharaImages["migikata_age"].setVisible(true);
+    this.nanaharaImagesDOM["migikata_age"]
+      .setVisible(true)
+      .addListener("click")
+      .on("click", () => {
+        //メニュー表示
+        console.dir("七原くん画像をクリックしてメニューを開く");
+      });
   }
 
   update(time: number, delta: number) {
