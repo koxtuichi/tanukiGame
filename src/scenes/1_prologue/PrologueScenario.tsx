@@ -13,10 +13,12 @@ export default class PrologueScenario extends Scenario {
   }
 
   create() {
+    this.currentBgImgName = "tanuki";
+    const migikata_age = "migikata_age";
     //共通の初期化
     this.init({
       bgImages: ["tanuki"],
-      nanaharaImages: ["migikata_age"],
+      nanaharaImages: [migikata_age],
       timeLineKey: "start",
       timeLines: prologueScenario,
     });
@@ -30,9 +32,13 @@ export default class PrologueScenario extends Scenario {
     this.setChar({ timeLineKey: "start" });
 
     //背景画像
-    this.bgImagesDOM["tanuki"].setVisible(true);
+    this.bgImagesDOM[this.currentBgImgName].setVisible(true);
+    this.setEmotionalToImage({
+      nanaharaImageName: "migikata_age",
+      emotional: "angry",
+    });
     //七原くん画像
-    this.nanaharaImagesDOM["migikata_age"]
+    this.nanaharaImagesDOM[migikata_age]
       .setVisible(true)
       .addListener("click")
       .on("click", () => {

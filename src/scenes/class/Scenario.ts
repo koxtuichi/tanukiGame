@@ -11,6 +11,7 @@ import TextDialogBox from "../../component/TextDialogBox";
 import StressPoint from "../1_prologue/point/StressPoint";
 import { Point } from "../../component/Point";
 import Image from "../../component/Image";
+import { EmotionalType } from "../1_prologue/const/EmotionalType";
 
 type initProps = {
   bgImages: string[];
@@ -26,6 +27,15 @@ type setTimeLinesProps = {
 
 type setCharProps = {
   timeLineKey: string;
+};
+
+type setEmotionalToImage = {
+  nanaharaImageName: string;
+  emotional: EmotionalType;
+  width?: number;
+  height?: number;
+  imgWidth?: number;
+  imgHeight?: number;
 };
 
 type nextCharProps = {
@@ -78,6 +88,7 @@ export default class Scenario extends Phaser.Scene {
   stressPoint: StressPoint;
   pointDOM: Phaser.GameObjects.DOMElement;
   isChoiceDisp: boolean = false;
+  currentBgImgName: string;
 
   preload() {}
 
@@ -108,28 +119,17 @@ export default class Scenario extends Phaser.Scene {
           .setVisible(false);
       });
     }
-    //七原くん画像
-    if (nanaharaImages && 0 < nanaharaImages.length) {
-      nanaharaImages.map((n) => {
-        this.nanaharaImagesDOM[n] = this.add
-          .dom(1000, this.height / 2 - 40, "div")
-          .setHTML(
-            Image({
-              width: 500,
-              height: 500,
-              src: `src/assets/img/nanahara/${n}.png`,
-            }).outerHTML
-          )
-          .setVisible(false);
-      });
-    }
+
     //会話ボックス
-    this.dialogBox = this.add.dom(this.width / 2, this.height - 155, "div");
+    this.dialogBox = this.add
+      .dom(this.width / 2, this.height - 155, "div")
+      .setDepth(100);
     //次へアイコン
     this.nextIcon = this.add
       .dom(this.width - 40, this.height - 20, "div")
       .setHTML(NextIcon().outerHTML)
-      .setVisible(false);
+      .setVisible(false)
+      .setDepth(100);
 
     this.timeLine = timeLines && timeLines[timeLineKey];
 
@@ -153,7 +153,9 @@ export default class Scenario extends Phaser.Scene {
       .setVisible(false);
 
     //流れる投稿コメント
-    this.postCommentDOM = this.add.dom(this.width, this.height, "div");
+    this.postCommentDOM = this.add
+      .dom(this.width, this.height, "div")
+      .setDepth(100);
   }
 
   setTimeLines({ timeLineKey, timeLines }: setTimeLinesProps) {
@@ -183,6 +185,66 @@ export default class Scenario extends Phaser.Scene {
           }).outerHTML
         )
     );
+  }
+
+  setEmotionalToImage({
+    nanaharaImageName,
+    emotional,
+    width,
+    height,
+    imgWidth,
+    imgHeight,
+  }: setEmotionalToImage) {
+    const w = width || 1000;
+    const h = height || this.height / 2 - 40;
+    let dropShadow = "";
+    switch (emotional) {
+      case "angry":
+        dropShadow = "drop-shadow(0px 0px 20px #800000)";
+        if (this.bgImagesDOM[this.currentBgImgName]) {
+          this.bgImagesDOM[this.currentBgImgName].destroy(true);
+        }
+        this.bgImagesDOM[this.currentBgImgName] = this.add
+          .dom(this.width / 2, this.height / 2, "div")
+          .setHTML(
+            Image({
+              width: this.width,
+              height: this.height,
+              src: `src/assets/img/prologue/${this.currentBgImgName}.png`,
+              className: "shake",
+            }).outerHTML
+          );
+
+        break;
+      case "surprising":
+        dropShadow = "drop-shadow(0px 0px 10px #00FF00)";
+        break;
+      case "sad":
+        dropShadow = "drop-shadow(0px 0px 10px #00FF00)";
+        break;
+      case "joyful":
+        dropShadow = "drop-shadow(0px 0px 10px #00FF00)";
+        break;
+      default:
+        break;
+    }
+
+    if (this.nanaharaImagesDOM[nanaharaImageName]) {
+      this.nanaharaImagesDOM[nanaharaImageName].destroy(true);
+    }
+
+    this.nanaharaImagesDOM[nanaharaImageName] = this.add
+      .dom(w, h, "div")
+      .setHTML(
+        Image({
+          width: imgWidth || 500,
+          height: imgHeight || 500,
+          src: `src/assets/img/nanahara/${nanaharaImageName}.png`,
+          dropShadow: dropShadow,
+          className: emotional,
+        }).outerHTML
+      )
+      .setDepth(0);
   }
 
   // 文字をひとつずつ順番に表示
@@ -329,7 +391,7 @@ export default class Scenario extends Phaser.Scene {
         return;
       }
       this.commentsPosition[i] -= 7;
-      c.setPosition(this.commentsPosition[i], this.height / 2);
+      c.setPosition(this.commentsPosition[i], this.height / 2).setDepth(100);
     });
 
     if (this.postCommentPosition < -1000) {

@@ -6,3 +6,20 @@ body {
   height: 100vh;
   font-family: sans-serif;
 }
+
+/* EmotionalType */
+.surprising {
+  animation: surprising 2.5s linear 0s 1;
+}
+.sad {
+  animation: sad 1s linear 0s 2;
+}
+.joyful {
+  animation: joyful 0.8s linear 0s 3;
+}
+.angry {
+  animation: angry 5s linear 0s 1;
+}
+.shake {
+  animation: shake 0.5s linear 0s 10;
+}
