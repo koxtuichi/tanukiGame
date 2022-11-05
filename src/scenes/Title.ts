@@ -16,8 +16,12 @@ export default class Title extends Phaser.Scene {
     this.add
       .dom(width / 2 - 160 - 24, height - 80, "div")
       .setHTML(
-        Button({ name: "クレジット", width: 160, height: 80 }).outerHTML
-      );
+        Button({ name: "フルスクリーン", width: 160, height: 80 }).outerHTML
+      )
+      .addListener("pointerup")
+      .on("pointerup", () => {
+        this.scale.startFullscreen();
+      });
     this.add
       .dom(width / 2, height - 80, "div")
       .setHTML(Button({ name: "スタート", width: 160, height: 80 }).outerHTML)
