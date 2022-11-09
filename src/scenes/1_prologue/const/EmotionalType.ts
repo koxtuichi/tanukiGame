@@ -1,1 +1,1 @@
-export type EmotionalType = "angry" | "surprising" | "sad" | "joyful" | "";
+export type EmotionalType = "angry" | "surprising" | "fearful" | "joyful" | "";

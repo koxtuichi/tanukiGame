@@ -1,9 +1,5 @@
 import "phaser";
 import NextIcon from "../../component/NextIcon";
-import type {
-  timeLineType,
-  timeLinesType,
-} from "../1_prologue/scenario/prologueScenario";
 import Comments from "../../component/Comments";
 import PostComment from "../../component/PostCommentFilter";
 import Button from "../../component/Button";
@@ -17,12 +13,12 @@ type initProps = {
   bgImages: string[];
   nanaharaImages: string[];
   timeLineKey: string;
-  timeLines: timeLinesType;
+  timeLines: {};
 };
 
 type setTimeLinesProps = {
   timeLineKey: string;
-  timeLines: timeLinesType;
+  timeLines: {};
 };
 
 type setCharProps = {
@@ -71,7 +67,7 @@ export default class Scenario extends Phaser.Scene {
   answerCharsIndex: number = 0;
   answerChars: {} = {};
   timeLineIndex: number = 0;
-  timeLine: timeLineType[];
+  timeLine: any[];
   elapsedTime: number = 0;
   txtDisp: string = "";
   dialogBox: Phaser.GameObjects.DOMElement;
@@ -166,7 +162,7 @@ export default class Scenario extends Phaser.Scene {
 
   setChar({ timeLineKey }: setCharProps) {
     if (timeLineKey) {
-      this.chars[timeLineKey] = [...this.timeLine[this.timeLineIndex].text];
+      this.chars[timeLineKey] = [...this.timeLine[this.timeLineIndex]["text"]];
     }
   }
 
@@ -181,7 +177,7 @@ export default class Scenario extends Phaser.Scene {
         .dom(this.commentsPosition[this.timeLineIndex], this.height / 2, "div")
         .setHTML(
           Comments({
-            comments: this.timeLine[this.timeLineIndex].comments,
+            comments: this.timeLine[this.timeLineIndex]["comments"],
           }).outerHTML
         )
     );
@@ -219,7 +215,7 @@ export default class Scenario extends Phaser.Scene {
       case "surprising":
         dropShadow = "drop-shadow(0px 0px 10px #00FF00)";
         break;
-      case "sad":
+      case "fearful":
         dropShadow = "drop-shadow(0px 0px 10px #00FF00)";
         break;
       case "joyful":
@@ -255,8 +251,8 @@ export default class Scenario extends Phaser.Scene {
     this.dialogBox.setHTML(
       TextDialogBox({
         text: this.txtDisp,
-        name: this.timeLine[this.timeLineIndex].name,
-        size: this.timeLine[this.timeLineIndex].size,
+        name: this.timeLine[this.timeLineIndex]["name"],
+        size: this.timeLine[this.timeLineIndex]["size"],
       }).outerHTML
     );
 
@@ -277,8 +273,8 @@ export default class Scenario extends Phaser.Scene {
     this.dialogBox.setHTML(
       TextDialogBox({
         text: this.txtDisp,
-        name: this.timeLine[this.timeLineIndex].name,
-        size: this.timeLine[this.timeLineIndex].answerSize || 30,
+        name: this.timeLine[this.timeLineIndex]["name"],
+        size: this.timeLine[this.timeLineIndex]["answerSize"] || 30,
       }).outerHTML
     );
 
@@ -299,7 +295,7 @@ export default class Scenario extends Phaser.Scene {
     this.timeLineIndex += 1;
     this.charIndex = 0;
     this.chars[timeLineKey] = [
-      ...(this.timeLine[this.timeLineIndex]?.text || ""),
+      ...(this.timeLine[this.timeLineIndex]["text"] || ""),
     ];
   };
 
@@ -370,7 +366,7 @@ export default class Scenario extends Phaser.Scene {
             //ダイアログボックスをクリックして選択肢を表示する
             this.isChoiceDisp = true;
             if (
-              !this.timeLine[this.timeLineIndex]?.choices &&
+              this.timeLine[this.timeLineIndex]["choices"].length === 0 &&
               this.timeLineIndex < this.timeLine.length
             ) {
               this.nextTimeLine({ timeLineKey: timeLineKey });
@@ -390,7 +386,7 @@ export default class Scenario extends Phaser.Scene {
         c.destroy(true);
         return;
       }
-      this.commentsPosition[i] -= 7;
+      this.commentsPosition[i] -= 5;
       c.setPosition(this.commentsPosition[i], this.height / 2).setDepth(100);
     });
 
@@ -400,7 +396,7 @@ export default class Scenario extends Phaser.Scene {
       this.postCommentDOM.destroy(true);
       return;
     }
-    this.postCommentPosition -= 7;
+    this.postCommentPosition -= 5;
     this.postCommentDOM.setPosition(
       this.postCommentPosition + 200,
       this.height / 2 - 80
@@ -441,19 +437,20 @@ export default class Scenario extends Phaser.Scene {
               isPostComment: true,
             }).outerHTML
           );
-        if (this.timeLine[this.timeLineIndex]?.answer) {
+        if (this.timeLine[this.timeLineIndex]["answer"]) {
           //回答があれば表示
           this.answerChars[timeLineKey] = [
-            ...(this.timeLine[this.timeLineIndex]?.answer[
+            ...(this.timeLine[this.timeLineIndex]["answer"][
               this.postCommentIndex
             ] || ""),
           ];
           //ストレスポイントをセット
           this.stressPoint.setPoint({
-            point:
-              this.timeLine[this.timeLineIndex].stressPoint[
-                this.postCommentIndex
-              ],
+            point: this.timeLine[this.timeLineIndex]["stressPoints"]
+              ? this.timeLine[this.timeLineIndex]["stressPoints"][
+                  this.postCommentIndex
+                ]
+              : 0,
           });
           this.pointDOM.destroy(true);
           this.pointDOM.setVisible(false);
@@ -496,19 +493,20 @@ export default class Scenario extends Phaser.Scene {
               isPostComment: true,
             }).outerHTML
           );
-        if (this.timeLine[this.timeLineIndex]?.answer) {
+        if (this.timeLine[this.timeLineIndex]["answer"]) {
           //回答があれば表示
           this.answerChars[timeLineKey] = [
-            ...(this.timeLine[this.timeLineIndex].answer[
+            ...(this.timeLine[this.timeLineIndex]["answer"][
               this.postCommentIndex
             ] || ""),
           ];
           //ストレスポイントをセット
           this.stressPoint.setPoint({
-            point:
-              this.timeLine[this.timeLineIndex].stressPoint[
-                this.postCommentIndex
-              ],
+            point: this.timeLine[this.timeLineIndex]["stressPoints"]
+              ? this.timeLine[this.timeLineIndex]["stressPoints"][
+                  this.postCommentIndex
+                ]
+              : 0,
           });
           this.pointDOM.setVisible(false);
           this.pointDOM.destroy(true);

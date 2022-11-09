@@ -11,8 +11,8 @@ body {
 .surprising {
   animation: surprising 2.5s linear 0s 1;
 }
-.sad {
-  animation: sad 1s linear 0s 2;
+.fearful {
+  animation: fearful 1s linear 0s 2;
 }
 .joyful {
   animation: joyful 0.8s linear 0s 3;

@@ -1,6 +1,6 @@
 import "phaser";
-import { prologueScenario } from "./scenario/prologueScenario";
 import Scenario from "../class/Scenario";
+import prologue from "../../tsvToJson/json/prologue.json";
 
 export default class PrologueScenario extends Scenario {
   constructor() {
@@ -15,19 +15,21 @@ export default class PrologueScenario extends Scenario {
   create() {
     this.currentBgImgName = "tanuki";
     const migikata_age = "migikata_age";
+    const timeLines = {};
+    timeLines["start"] = prologue;
     //共通の初期化
     this.init({
       bgImages: ["tanuki"],
       nanaharaImages: [migikata_age],
       timeLineKey: "start",
-      timeLines: prologueScenario,
+      timeLines: timeLines,
     });
     //次のシーン
     this.nextSceneName = "PartSelective";
     //タイムラインの番号
     this.timeLineIndex = 0;
     //タイムラインをセット
-    this.setTimeLines({ timeLineKey: "start", timeLines: prologueScenario });
+    this.setTimeLines({ timeLineKey: "start", timeLines: timeLines });
     //タイムラインテキストをセット
     this.setChar({ timeLineKey: "start" });
 
@@ -52,7 +54,7 @@ export default class PrologueScenario extends Scenario {
       //表示フラグたっている
       this.isChoiceDisp &&
       //選択肢ある
-      this.timeLine[this.timeLineIndex]?.choices &&
+      0 < this.timeLine[this.timeLineIndex]["choices"].length &&
       //投稿コメントが画面にない
       !this.isPostedComment &&
       //ダイアログのテキストが最後の文字まで表示されている
@@ -63,7 +65,7 @@ export default class PrologueScenario extends Scenario {
     ) {
       //選択肢を表示する
       this.choicesDisp({
-        choices: this.timeLine[this.timeLineIndex].choices,
+        choices: this.timeLine[this.timeLineIndex]["choices"],
         timeLineKey: "start",
       });
     } else {
